@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+   
+<head>
+    
+    <title>Doação para a Igreja</title>
+   
+   <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: url(./igreja.jpg) no-repeat center center fixed; 
+            -webkit-background-size: cover;
+            -moz-background-size: cover;
+            -o-background-size: cover;
+            background-size: cover;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .container {
+            text-align: center;
+            max-width: 600px;
+            padding: 20px;
+            background-color: rgba(255, 255, 255, 0.8);
+            border-radius: 15px;
+        }
+        #totalDoacoes {
+            color: green;
+            font-size: 2em;
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .header img {
+            width: 35%;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Doação para a Igreja</h1>
+            <img src="./Logo.png" alt="Logo da Igreja">
+        </div>
+        <p>Ajude o seu irmão próximo com uma doação.</p>
+
+        <label for="nome">Nome:</label><br>
+        <input type="text" id="nome" name="nome"><br><br>
+
+        <label for="doacao">Insira o valor da doação (R$):</label><br>
+        <input type="number" id="doacao" name="doacao" min="0.01"><br><br>
+
+        <button onclick="adicionarDoacao()">Adicionar Valores</button><br><br>
+
+        <button onclick="exportarDoacoes()">Exportar Doações</button>
+
+        <h2>Total de Doações:</h2>
+        <p id="totalDoacoes">R$0</p>
+    </div>
+
+    <script>
+        var totalDoacoes = 0;
+        var doacoes = [];
+
+        function adicionarDoacao() {
+            var nome = document.getElementById('nome').value;
+            var doacao = parseFloat(document.getElementById('doacao').value);
+            
+            if (isNaN(doacao)) {
+                alert('Por favor, insira um número válido.');
+                return;
+            }
+
+            totalDoacoes += doacao;
+            
+            doacoes.push({
+                nome: nome,
+                doacao: doacao
+            });
+
+            document.getElementById('totalDoacoes').innerHTML = "R$" + totalDoacoes.toFixed(2);
+            
+            document.getElementById('nome').value = "";
+            document.getElementById('doacao').value = "";
+        }
+
+        function exportarDoacoes() {
+            var csv = 'Nome,Doação\n';
+            
+            doacoes.forEach(function(doacao) {
+                csv += doacao.nome + ',' + doacao.doacao + '\n';
+            });
+            
+            var blob = new Blob([csv], {type: 'text/csv'});
+            
+            var url = URL.createObjectURL(blob);
+            
+            var link = document.createElement('a');
+            
+            link.href = url;
+            
+            link.download = 'doacoes.csv';
+            
+            link.click();
+        }
+    </script>
+</body>
+</html>
